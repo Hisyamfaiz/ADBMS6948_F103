@@ -1,0 +1,15 @@
+Adbms6948_OtherMonitor.cpp:121:23:Adbms6948_ReturnType Adbms6948_Int_ReadDevRevCode(uint8_t*, uint8_t)	24	static
+Adbms6948_OtherMonitor.cpp:190:23:Adbms6948_ReturnType Adbms6948_Int_WakeUpBmsIC(uint8_t)	24	static
+Adbms6948_OtherMonitor.cpp:230:23:Adbms6948_ReturnType Adbms6948_Int_SendSoftReset(uint8_t)	24	static
+Adbms6948_OtherMonitor.cpp:295:23:Adbms6948_ReturnType Adbms6948_Int_ReadSerialID(uint8_t*, uint8_t)	40	static
+Adbms6948_OtherMonitor.cpp:399:23:Adbms6948_ReturnType Adbms6948_Int_I2CWrite(Adbms6948_I2CWriteCfgType*, uint8_t*, uint8_t)	40	static
+Adbms6948_OtherMonitor.cpp:483:23:Adbms6948_ReturnType Adbms6948_Int_I2CRead(Adbms6948_I2CReadCfgType*, uint8_t*, uint8_t)	56	static
+Adbms6948_OtherMonitor.cpp:566:22:Adbms6948_ReturnType Adbms6948_Int_AlwaysOnMemWrite(uint8_t*, uint8_t)	24	static
+Adbms6948_OtherMonitor.cpp:639:22:Adbms6948_ReturnType Adbms6948_Int_AlwaysOnMemRead(uint8_t*, uint8_t)	24	static
+Adbms6948_OtherMonitor.cpp:719:30:Adbms6948_ReturnType Adbms6948_lI2CWrData(Adbms6948_I2CWriteCfgType*, uint8_t*, boolean, uint16_t*, uint8_t)	64	static
+Adbms6948_OtherMonitor.cpp:785:30:Adbms6948_ReturnType Adbms6948_lI2CRdData(Adbms6948_I2CReadCfgType*, uint8_t*, uint16_t*, uint8_t)	56	static
+Adbms6948_OtherMonitor.cpp:840:18:uint16_t Adbms6948_lI2CGetWrComCntWr(Adbms6948_I2CWriteCfgType*, uint16_t*, uint8_t)	32	static
+Adbms6948_OtherMonitor.cpp:884:18:uint16_t Adbms6948_lI2CGetWrComCntRd(Adbms6948_I2CReadCfgType*, uint16_t*, uint8_t)	32	static
+Adbms6948_OtherMonitor.cpp:922:18:uint16_t Adbms6948_lI2CGetWrComCnt(uint16_t)	24	static
+Adbms6948_OtherMonitor.cpp:945:29:Adbms6948_ReturnType Adbms6948_lAlwaysOnMemWrite(uint8_t*, uint8_t)	24	static
+Adbms6948_OtherMonitor.cpp:975:29:Adbms6948_ReturnType Adbms6948_lAlwaysOnMemRead(uint8_t*, uint8_t)	24	static

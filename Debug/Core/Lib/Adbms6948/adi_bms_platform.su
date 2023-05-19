@@ -1,0 +1,20 @@
+adi_bms_platform.cpp:56:6:void adi_pal_Init()	4	static
+adi_bms_platform.cpp:60:28:void Adbms6948_SPI_Lock()	4	static
+adi_bms_platform.cpp:61:28:void Adbms6948_SPI_Unlock()	4	static
+adi_bms_platform.cpp:62:28:void Adbms6948_SPI_Read(uint8_t*, uint16_t)	16	static
+adi_bms_platform.cpp:63:28:void Adbms6948_SPI_Write(uint8_t*, uint16_t)	16	static
+adi_bms_platform.cpp:64:28:void Adbms6948_SPI_WriteRead(uint8_t*, uint8_t*, uint16_t)	24	static
+adi_bms_platform.cpp:73:28:void adi_pal_SPI_Init()	4	static
+adi_bms_platform.cpp:85:28:void adi_pal_ReportDevelopmentError(uint16, uint8, uint8, uint8)	24	static
+adi_bms_platform.cpp:102:28:void adi_pal_ReportRuntimeError(uint16, uint8)	16	static
+adi_bms_platform.cpp:123:28:void adi_pal_Memset(uint8*, uint8, uint32)	24	static
+adi_bms_platform.cpp:143:28:void adi_pal_Memcpy(uint8*, uint8*, uint32)	24	static
+adi_bms_platform.cpp:160:28:void adi_pal_SpiWrite(uint8*, uint16, uint8)	32	dynamic
+adi_bms_platform.cpp:195:28:void adi_pal_SpiWriteReads(uint8 (*)[12], uint8 (*)[12], uint32, uint8)	56	dynamic
+adi_bms_platform.cpp:244:28:void adi_pal_SpiWriteReadAll(uint8*, uint8*, uint32, uint8)	48	dynamic
+adi_bms_platform.cpp:265:31:boolean adi_pal_IsError(uint8)	24	static
+adi_bms_platform.cpp:282:28:void adi_pal_TimerDelay(uint32, uint8)	16	static
+adi_bms_platform.cpp:291:28:void adi_pal_DeInit()	4	static
+adi_bms_platform.cpp:303:31:boolean adi_pal_GetTimeoutStatus(uint8)	24	static
+adi_bms_platform.cpp:319:28:void adi_pal_TimerStart(uint32, uint8)	16	static
+adi_bms_platform.cpp:337:28:void Det_ReportError(uint16, uint8, uint8, uint8)	16	static

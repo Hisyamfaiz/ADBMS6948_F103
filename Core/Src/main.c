@@ -23,6 +23,7 @@
 #include "dma.h"
 #include "i2c.h"
 #include "iwdg.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -33,15 +34,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "LTC68042.h"
 #include "EEPROM.h"
 #include "Battery_Charge_Discharge.h"
 #include "ctype.h"
+#include "Adbms6948_Applications.h"
+#include "Adbms6948/lib/Adbms6948_Common.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+#define VBATT_BALANCE_START 33
+#define VCELL_BALANCE_PERMITTED 3.3
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -65,7 +68,7 @@ char	lower_UNIQUE_Code[5],
 
 int Sleep_tick=10000,
 	Shutdown_tick=15000;
-float pack_voltage;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -76,7 +79,11 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+char pesan[20];
+const uint8_t knChainId = 0u;
+int nRet = 0;
+float CellVoltage[16], Current;
+float sum_voltage, pack_voltage;
 /* USER CODE END 0 */
 
 /**
@@ -115,6 +122,7 @@ int main(void)
   MX_TIM3_Init();
   MX_I2C2_Init();
   MX_IWDG_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
   BMS_Init();
@@ -129,39 +137,36 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  //Read voltage per-cell and total voltage
-	  ltc6804_CS_RESET(ltc6804_CS_PIN);
-	  read_voltage_percell();
-	  read_sumvoltage();
-//	  for(uint8_t ij=0; ij<15; ij++){
-//		  pack_voltage += cellvoltage_float[ij];
-//	  }
-//	  sum_voltage = pack_voltage;
-//	  pack_voltage = 0;
+	  Adbms6948_measure_cells(knChainId, nRet);
+	  HAL_Delay(1);
+	  for(uint8_t ij=0; ij<10; ij++){
+		  pack_voltage += CellVoltage[ij];
+	  }
+	  sum_voltage = pack_voltage;
+	  pack_voltage = 0;
 
-	  ltc6804_CS_SET(ltc6804_CS_PIN);
+	  //Read Current
+	  Adbms6948_measure_current(knChainId, nRet);
+	  HAL_Delay(1);
 
 	  //comparing cell voltage to get
-	  unbalance_cell = get_balance_status(cellvoltage_float);
+	  unbalance_cell = get_balance_status(CellVoltage);
 
 	  // Balancing Process
 	  if(BMS_mode == 2 && IBATT < -0.1 && (VBATT > VBATT_BALANCE_START))     //arus charging 0.1 tidak perlu di balancing
 	  {
-		  LTC681x_balance_cell(balance_status);
+//		  Adbms6948_discharge_cell(balance_status);
 	  }
 	  else
 	  {
 		  balance_status = 0;
-		  LTC681x_balance_cell(0);
+//		  Adbms6948_Discharge_Cell(0);
 	  }
 
-	  //Force Balancing
-	  //LTC681x_balance_cell(1 s/d 512);
+	  Adbms6948_Discharge_Cell(8);
 
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-
-//	  //test turn off system
-//	  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10))
-//		  HAL_GPIO_WritePin(BMS_SHUTDOWN_GPIO_Port, BMS_SHUTDOWN_Pin, 1);
+	  HAL_Delay(50);
 
 	  BMS_ScreenMode_RUN();
 	  HAL_IWDG_Refresh(&hiwdg);
@@ -238,6 +243,8 @@ void BMS_Init(void)
 	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
 	HAL_Delay(100);
 
+	Adbms_Init(NULL);
+
 	SSD1306_Init();
 	HAL_Delay(500);
 	SSD1306_Fill(SSD1306_COLOR_BLACK);
@@ -249,12 +256,6 @@ void BMS_Init(void)
 	SSD1306_Puts ("10S13P", &Font_7x10, 1);
 	SSD1306_UpdateScreen(); //display
 	SSD1306_Fill (0);
-
-
-	ltc6804_GPIO_Config();
-	ltc6804_SPIInit();
-
-	set_adc(MD_FILTERED, DCP_DISABLED, CELL_CH_ALL, AUX_CH_ALL); //ADC Setting
 	HAL_Delay(10);
 
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t *) &adc_value, 7);
@@ -310,17 +311,17 @@ void BMS_ScreenMode_RUN(void)
 		Shutdown_time=HAL_GetTick();
 		if(Shutdown_time-Shutdown_time_last>Shutdown_tick)
 		{
-			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-			HAL_Delay(100);
-			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-			HAL_Delay(100);
-			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-			HAL_Delay(100);
-			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-			HAL_Delay(100);
-			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-			HAL_Delay(750);
-			HAL_GPIO_WritePin(BMS_SHUTDOWN_GPIO_Port, BMS_SHUTDOWN_Pin, 1);
+//			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+//			HAL_Delay(100);
+//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+//			HAL_Delay(100);
+//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+//			HAL_Delay(100);
+//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+//			HAL_Delay(100);
+//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+//			HAL_Delay(750);
+//			HAL_GPIO_WritePin(BMS_SHUTDOWN_GPIO_Port, BMS_SHUTDOWN_Pin, 1);
 		}
 
 		last_flag_start_shutdown = 0;
@@ -389,6 +390,35 @@ void BMS_ScreenMode_RUN(void)
 		last_flag_start_shutdown = 1;
 	}
 	HAL_Delay(1);
+}
+
+uint16_t get_balance_status(float Cell_Voltage_10data[10])
+{
+	uint16_t balance_status;
+	float Cell_Voltage_Lowest = 4.2;
+	float delta_vbatt[10];
+	balance_status=0x0000;
+	uint16_t temp_dat;
+	float buffer_imbalance;
+
+	for(int ik=0;ik<10;ik++) {
+		if(Cell_Voltage_10data[ik] < Cell_Voltage_Lowest)
+			Cell_Voltage_Lowest = Cell_Voltage_10data[ik];
+	}
+
+	for(int ik=0;ik<10;ik++) {
+		delta_vbatt[ik] = Cell_Voltage_10data[ik] - Cell_Voltage_Lowest;
+
+		buffer_imbalance+=delta_vbatt[ik];
+
+		if(delta_vbatt[ik]> 0.025 && Cell_Voltage_10data[ik] > VCELL_BALANCE_PERMITTED) {
+			temp_dat = 0x01;
+			temp_dat = temp_dat << ik;
+			balance_status= balance_status+temp_dat;
+		}
+	}
+	persen_imbalance=buffer_imbalance*100/9.0/1.2;
+	return(balance_status);
 }
 /* USER CODE END 4 */
 

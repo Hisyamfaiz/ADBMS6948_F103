@@ -27,13 +27,30 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_iwdg.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/can.h ../Core/Inc/dma.h \
- ../Core/Inc/i2c.h ../Core/Inc/iwdg.h ../Core/Inc/tim.h \
- ../Core/Inc/gpio.h ../Core/Inc/LTC68042.h ../Core/Inc/EEPROM.h \
- ../Core/Inc/i2c.h ../Core/Inc/ssd1306.h ../Core/Inc/fonts.h \
- ../Core/Inc/Battery_Charge_Discharge.h
+ ../Core/Inc/i2c.h ../Core/Inc/iwdg.h ../Core/Inc/spi.h ../Core/Inc/tim.h \
+ ../Core/Inc/gpio.h ../Core/Inc/EEPROM.h ../Core/Inc/i2c.h \
+ ../Core/Inc/ssd1306.h ../Core/Inc/fonts.h \
+ ../Core/Inc/Battery_Charge_Discharge.h \
+ ../Core/Inc/Adbms6948_Applications.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_config.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_defs.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/MemMap.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_Common.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/MemMap.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_ExecCmd.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_Types.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/adi_bms_platform.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_defs.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/spi.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/utils/timer.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/default_config.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_config.h \
+ C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_Pec.h
 
 ../Core/Inc/main.h:
 
@@ -93,6 +110,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h:
+
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h:
@@ -109,11 +128,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/iwdg.h:
 
+../Core/Inc/spi.h:
+
 ../Core/Inc/tim.h:
 
 ../Core/Inc/gpio.h:
-
-../Core/Inc/LTC68042.h:
 
 ../Core/Inc/EEPROM.h:
 
@@ -124,3 +143,35 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/fonts.h:
 
 ../Core/Inc/Battery_Charge_Discharge.h:
+
+../Core/Inc/Adbms6948_Applications.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_config.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_defs.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/MemMap.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_Common.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/MemMap.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_ExecCmd.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_Types.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/adi_bms_platform.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_defs.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/spi.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/utils/timer.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/default_config.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/_config.h:
+
+C:/Users/faiz_/STM32CubeIDE/workspace_1.7.0/ADBMS6948_F103/Lib/Adbms6948/inc/Adbms6948/lib/Adbms6948_Pec.h:

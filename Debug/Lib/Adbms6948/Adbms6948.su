@@ -1,0 +1,59 @@
+Adbms6948.cpp:73:23:Adbms6948_ReturnType Adbms6948_Init(const Adbms6948_CfgType*)	16	static
+Adbms6948.cpp:90:23:Adbms6948_ReturnType Adbms6948_DeInit()	8	static
+Adbms6948.cpp:120:23:Adbms6948_ReturnType Adbms6948_CfgSoakControl(boolean*, uint8_t)	16	static
+Adbms6948.cpp:148:23:Adbms6948_ReturnType Adbms6948_CfgSoakTime(Adbms6948_AuxSoakTimeCfgType*, uint8_t)	16	static
+Adbms6948.cpp:180:23:Adbms6948_ReturnType Adbms6948_CfgOVThreshold(Adbms6948_OVThresCfgType*, uint8_t)	16	static
+Adbms6948.cpp:213:23:Adbms6948_ReturnType Adbms6948_CfgUVThreshold(Adbms6948_UVThresCfgType*, uint8_t)	16	static
+Adbms6948.cpp:239:23:Adbms6948_ReturnType Adbms6948_CfgIIRFilter(Adbms6948_IIRCornerFreqType*, uint8_t)	16	static
+Adbms6948.cpp:267:23:Adbms6948_ReturnType Adbms6948_CfgCSCompThresVolt(Adbms6948_CSThresVoltType*, uint8_t)	16	static
+Adbms6948.cpp:295:23:Adbms6948_ReturnType Adbms6948_CfgGpioPins(Adbms6948_GpioPinCfgType*, uint8_t)	16	static
+Adbms6948.cpp:321:22:Adbms6948_ReturnType Adbms6948_CfgOC1Params(Adbms6948_OC1CfgType*, uint8_t)	16	static
+Adbms6948.cpp:345:23:Adbms6948_ReturnType Adbms6948_CfgOC2Params(Adbms6948_OC2CfgType*, uint8_t)	16	static
+Adbms6948.cpp:387:23:Adbms6948_ReturnType Adbms6948_ReadDevRevCode(uint8_t*, uint8_t)	16	static
+Adbms6948.cpp:410:23:Adbms6948_ReturnType Adbms6948_WakeUpBmsIC(uint8_t)	16	static
+Adbms6948.cpp:432:23:Adbms6948_ReturnType Adbms6948_SendSoftReset(uint8_t)	16	static
+Adbms6948.cpp:462:23:Adbms6948_ReturnType Adbms6948_ReadSerialID(uint8_t*, uint8_t)	16	static
+Adbms6948.cpp:503:23:Adbms6948_ReturnType Adbms6948_I2CWrite(Adbms6948_I2CWriteCfgType*, uint8_t*, uint8_t)	24	static
+Adbms6948.cpp:544:23:Adbms6948_ReturnType Adbms6948_I2CRead(Adbms6948_I2CReadCfgType*, uint8_t*, uint8_t)	24	static
+Adbms6948.cpp:574:22:Adbms6948_ReturnType Adbms6948_AlwaysOnMemWrite(uint8_t*, uint8_t)	16	static
+Adbms6948.cpp:602:22:Adbms6948_ReturnType Adbms6948_AlwaysOnMemRead(uint8_t*, uint8_t)	16	static
+Adbms6948.cpp:642:23:Adbms6948_ReturnType Adbms6948_ReadDriverVersion(Adbms6948_VersionInfoType*)	16	static
+Adbms6948.cpp:680:23:Adbms6948_ReturnType Adbms6948_OverVoltEval(uint16_t*, Adbms6948_OVThresCfgType*, Adbms6948_OVEvalType*, uint8_t)	24	static
+Adbms6948.cpp:721:23:Adbms6948_ReturnType Adbms6948_UnderVoltEval(uint16_t*, Adbms6948_UVThresCfgType*, Adbms6948_UVEvalType*, uint8_t)	24	static
+Adbms6948.cpp:763:23:Adbms6948_ReturnType Adbms6948_ReadErrorCounts(Adbms6948_ErrorCounts*, uint8_t)	16	static
+Adbms6948.cpp:786:23:Adbms6948_ReturnType Adbms6948_ClearErrorCounts(uint8_t)	16	static
+Adbms6948.cpp:821:23:Adbms6948_ReturnType Adbms6948_TrigCADC(Adbms6948_TrigCADCInputs*, uint8_t)	16	static
+Adbms6948.cpp:860:23:Adbms6948_ReturnType Adbms6948_TrigSADC(boolean, boolean, Adbms6948_CellOWSelType, uint8_t)	24	static
+Adbms6948.cpp:901:23:Adbms6948_ReturnType Adbms6948_TrigAuxADC(boolean, boolean, Adbms6948_AuxChSelType, uint8_t)	24	static
+Adbms6948.cpp:931:23:Adbms6948_ReturnType Adbms6948_TrigRedAuxADC(Adbms6948_RedAuxChSelType, uint8_t)	16	static
+Adbms6948.cpp:955:23:Adbms6948_ReturnType Adbms6948_TrigI1ADC(Adbms6948_TrigI1ADCInputs*, uint8_t)	16	static
+Adbms6948.cpp:979:23:Adbms6948_ReturnType Adbms6948_TrigI2ADC(Adbms6948_TrigI2ADCInputs*, uint8_t)	16	static
+Adbms6948.cpp:1006:23:Adbms6948_ReturnType Adbms6948_TrigIVADC(Adbms6948_TrigIVADCInputs*, uint8_t)	16	static
+Adbms6948.cpp:1038:23:Adbms6948_ReturnType Adbms6948_ReadCADCConvCnt(uint16_t*, Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1070:22:Adbms6948_ReturnType Adbms6948_ReadVoltageCurrentCTValues(uint16_t*, uint16_t*, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948.cpp:1103:23:Adbms6948_ReturnType Adbms6948_ReadI1ADCConvCnt(uint16_t*, Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1152:22:Adbms6948_ReturnType Adbms6948_ReadCellVolt(Adbms6948_CellMeasDataType, Adbms6948_CellGrpSelType, int16_t*, Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1184:23:Adbms6948_ReturnType Adbms6948_ReadAllAverageCellVoltages(int16_t*, uint8_t)	16	static
+Adbms6948.cpp:1238:23:Adbms6948_ReturnType Adbms6948_ReadGPIOInputVolt(Adbms6948_GpioMeasDataType, Adbms6948_GpioGrpSelType, int16_t*, uint8_t)	16	static
+Adbms6948.cpp:1299:23:Adbms6948_ReturnType Adbms6948_ReadDevParam(Adbms6948_DevParamGrpSelType, int16_t*, uint8_t)	16	static
+Adbms6948.cpp:1340:23:Adbms6948_ReturnType Adbms6948_ReadAllAuxStatusRegisters(int16_t*, int16_t*, Adbms6948_StatusRegValsType*, uint8_t)	24	static
+Adbms6948.cpp:1380:23:Adbms6948_ReturnType Adbms6948_ReadCurrent(Adbms6948_CurrentMeasDataType, Adbms6948_CurrentSelType, int32_t*, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948.cpp:1410:22:Adbms6948_ReturnType Adbms6948_ReadCADCI1ADC(int16_t*, int32_t*, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948.cpp:1455:23:Adbms6948_ReturnType Adbms6948_ReadCellVoltCurrentAverage(int16_t*, int32_t*, boolean, uint16_t*, uint16_t*, uint8_t)	32	static
+Adbms6948.cpp:1486:23:Adbms6948_ReturnType Adbms6948_SendCtrlCmd(Adbms6948_CtrlCmdSelType, uint8_t)	16	static
+Adbms6948.cpp:1519:23:Adbms6948_ReturnType Adbms6948_PollADCStatus(Adbms6948_ADCSelType, boolean*, uint8_t)	16	static
+Adbms6948.cpp:1542:22:Adbms6948_ReturnType Adbms6948_ClearAllFlags(uint8_t)	16	static
+Adbms6948.cpp:1569:22:Adbms6948_ReturnType Adbms6948_ClearCellVoltageRegisters(Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1603:22:Adbms6948_ReturnType Adbms6948_ClearCurrentRegisters(Adbms6948_CurrentSelType, Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1693:23:Adbms6948_ReturnType Adbms6948_CellOWDiag(uint16_t*, uint16_t*, boolean, uint8_t*, uint8_t)	32	static
+Adbms6948.cpp:1745:23:Adbms6948_ReturnType Adbms6948_CurrentOWDiag(uint32_t*, uint32_t*, boolean, uint8_t*, uint8_t)	24	static
+Adbms6948.cpp:1798:23:Adbms6948_ReturnType Adbms6948_ReadCellOVUVStatus(uint32_t*, Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1839:23:Adbms6948_ReturnType Adbms6948_ReadCSFltStatus(uint16_t*, Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1874:23:Adbms6948_ReturnType Adbms6948_ReadOscChkCnt(uint8_t*, Adbms6948_SnapSelType, uint8_t)	16	static
+Adbms6948.cpp:1919:23:Adbms6948_ReturnType Adbms6948_EnableLPFDet(uint8_t*, uint8_t)	16	static
+Adbms6948.cpp:1992:23:Adbms6948_ReturnType Adbms6948_ReadDiagFlagStatus(uint32_t*, uint8_t*, Adbms6948_SnapSelType, boolean, uint8_t)	32	static
+Adbms6948.cpp:2026:22:Adbms6948_ReturnType Adbms6948_PECAlgoDiag(uint8_t*, uint8_t)	16	static
+Adbms6948.cpp:2064:22:Adbms6948_ReturnType Adbms6948_EnableCoulombCounter(boolean, uint8_t)	16	static
+Adbms6948.cpp:2092:22:Adbms6948_ReturnType Adbms6948_CfgCoulombCounter(uint16_t*, uint8_t)	16	static
+Adbms6948.cpp:2124:22:Adbms6948_ReturnType Adbms6948_ReadCoulombCountAndTimeBase(uint32_t*, uint16_t*, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948.cpp:2147:22:Adbms6948_ReturnType Adbms6948_ClearCoulombCountAndTimeBase(uint8_t)	16	static

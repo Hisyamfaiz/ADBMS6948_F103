@@ -1,0 +1,40 @@
+Adbms6948_Common.cpp:137:6:void Adbms6948_Cmn_WakeUpBmsIC(uint8_t)	24	static
+Adbms6948_Common.cpp:166:6:void Adbms6948_Cmn_ReportRuntimeErr(uint16_t, uint8_t)	16	static
+Adbms6948_Common.cpp:183:9:boolean Adbms6948_Cmn_IsError(uint8_t)	24	static
+Adbms6948_Common.cpp:212:10:boolean Adbms6948_Cmn_ValidatePEC(uint8_t*, uint8_t, uint8_t, uint8_t)	32	static
+Adbms6948_Common.cpp:282:23:Adbms6948_ReturnType Adbms6948_Cmn_VerifyCmdCnt(boolean, uint8_t)	40	static
+Adbms6948_Common.cpp:310:23:Adbms6948_ReturnType Adbms6948_Cmn_InitChain(uint8_t)	96	static
+Adbms6948_Common.cpp:468:22:Adbms6948_ReturnType Adbms6948_Read_Group(uint16_t)	40	static
+Adbms6948_Common.cpp:490:22:Adbms6948_ReturnType Adbms6948_Mute_DischargeCell(uint8_t)	64	static
+Adbms6948_Common.cpp:534:22:Adbms6948_ReturnType Adbms6948_discharge_cell(uint16_t)	48	static
+Adbms6948_Common.cpp:597:23:Adbms6948_ReturnType Adbms6948_Cmn_UpdateConfigPerDevice(Adbms6948_ConfigGroupSelection, uint8_t, uint8_t, uint8_t*, uint8_t)	72	static
+Adbms6948_Common.cpp:727:23:Adbms6948_ReturnType Adbms6948_Cmn_UpdateConfig16(Adbms6948_ConfigGroupSelection, uint8_t, uint8_t*, uint8_t*, uint8_t)	80	static
+Adbms6948_Common.cpp:884:23:Adbms6948_ReturnType Adbms6948_Cmn_PwmDischarge(uint8_t*, uint8_t*, uint8_t)	72	static
+Adbms6948_Common.cpp:968:23:Adbms6948_ReturnType Adbms6948_Cmn_ReadDevRevCode(uint8_t*, uint8_t)	64	static
+Adbms6948_Common.cpp:1019:22:Adbms6948_ReturnType Adbms6948_Cmn_SoftReset(uint8_t)	56	static
+Adbms6948_Common.cpp:1069:7:void Adbms6948_Cmn_I2CWrSendRegGrpData(Adbms6948_I2CWriteCfgType*, Adbms6948_I2CIdxData*, boolean, boolean, uint8_t)	40	static
+Adbms6948_Common.cpp:1113:7:void Adbms6948_Cmn_I2CRdSendRegGrpData(uint8_t*, uint16_t*, uint8_t)	32	static
+Adbms6948_Common.cpp:1212:23:Adbms6948_ReturnType Adbms6948_Cmn_I2CGetRdData(Adbms6948_I2CReadCfgType*, uint8_t*, uint16_t*, uint8_t*, uint8_t)	56	static
+Adbms6948_Common.cpp:1300:23:Adbms6948_ReturnType Adbms6948_Cmn_ReadRegGroup(uint16_t*, uint8_t (*)[12], uint8_t, uint8_t)	136	static
+Adbms6948_Common.cpp:1357:23:Adbms6948_ReturnType Adbms6948_Cmn_ReadAllRegGroups(uint16_t, uint8_t*, uint8_t, uint8_t)	32	static
+Adbms6948_Common.cpp:1408:7:void Adbms6948_Cmn_WriteRegGroup(uint16_t*, uint8_t, uint8_t (*)[12], uint8_t)	40	static
+Adbms6948_Common.cpp:1445:7:void Adbms6948_Cmn_SendCommandOnly(uint16_t, boolean, uint8_t)	16	static
+Adbms6948_Common.cpp:1475:7:void Adbms6948_Cmn_ExecuteCmdRD(uint16_t*, uint8_t (*)[12], uint32_t, boolean, uint8_t)	32	static
+Adbms6948_Common.cpp:1500:6:void Adbms6948_Cmn_ExecuteCmdWR(uint16_t, uint8_t*, uint8_t)	16	static
+Adbms6948_Common.cpp:1522:6:void Adbms6948_Cmn_ExecCmdWithCPECBitFlip(uint16_t, uint8_t, uint8_t)	16	static
+Adbms6948_Common.cpp:1547:6:void Adbms6948_Cmn_ExecCmdWRWithDPECBitFLip(uint16_t, uint8_t*, uint8_t, uint8_t)	16	static
+Adbms6948_Common.cpp:1565:10:boolean Adbms6948_Cmn_IsInvalidSnapSelType(Adbms6948_SnapSelType)	24	static
+Adbms6948_Common.cpp:1604:22:Adbms6948_ReturnType Adbms6948_Cmn_UpdateChainStatus(Adbms6948_ChainStateType, uint8_t)	24	static
+Adbms6948_Common.cpp:1638:6:void Adbms6948_Cmn_ReportDevErr(uint16_t, uint8_t, uint8_t, uint8_t)	24	static
+Adbms6948_Common.cpp:1654:6:void Adbms6948_Cmn_EnterCriticalSection()	4	static
+Adbms6948_Common.cpp:1664:6:void Adbms6948_Cmn_ExitCriticalSection()	4	static
+Adbms6948_Common.cpp:1675:6:void Adbms6948_Cmn_Memset(uint8_t*, uint8_t, uint32_t)	24	static
+Adbms6948_Common.cpp:1688:6:void Adbms6948_Cmn_Memcpy(uint8_t*, uint8_t*, uint32_t)	24	static
+Adbms6948_Common.cpp:1716:13:void Adbms6948_lI2CUpdRdBuf(Adbms6948_I2CReadCfgType*, uint8_t (*)[12], uint8_t*, uint16_t*, uint8_t)	32	static
+Adbms6948_Common.cpp:1779:13:void Adbms6948_lInitMaxCellGrps(uint8_t)	24	static
+Adbms6948_Common.cpp:1826:14:void Adbms6948_lI2CPrepWrDataWr(Adbms6948_I2CWriteCfgType*, uint8_t (*)[6], Adbms6948_I2CIdxData*, boolean, uint8_t)	32	static
+Adbms6948_Common.cpp:1937:13:void Adbms6948_lI2CPrepWrDataRd(Adbms6948_I2CWriteCfgType*, uint8_t (*)[6], Adbms6948_I2CIdxData*, uint8_t)	32	static
+Adbms6948_Common.cpp:1996:14:void Adbms6948_lI2CSetNoTx(uint8_t, uint8_t (*)[6])	16	static
+Adbms6948_Common.cpp:2019:14:void Adbms6948_lPrepConfigBuff(uint16_t, uint8_t (*)[12], uint8_t*, uint8_t*, uint8_t)	32	static
+Adbms6948_Common.cpp:2050:16:uint8_t Adbms6948_lI2CGetRdStat(uint8_t, uint8_t*)	24	static
+Adbms6948_Common.cpp:2093:16:uint8_t Adbms6948_lI2CGetWrStat(uint8_t, uint8_t*)	24	static

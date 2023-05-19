@@ -1,0 +1,63 @@
+Adbms6948_Measure.cpp:306:23:Adbms6948_ReturnType Adbms6948_Int_TrigCADC(Adbms6948_TrigCADCInputs*, uint8_t)	24	static
+Adbms6948_Measure.cpp:394:23:Adbms6948_ReturnType Adbms6948_Int_TrigSADC(boolean, boolean, Adbms6948_CellOWSelType, uint8_t)	32	static
+Adbms6948_Measure.cpp:475:23:Adbms6948_ReturnType Adbms6948_Int_TrigAuxADC(boolean, boolean, Adbms6948_AuxChSelType, uint8_t)	32	static
+Adbms6948_Measure.cpp:551:23:Adbms6948_ReturnType Adbms6948_Int_TrigRedAuxADC(Adbms6948_RedAuxChSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:622:23:Adbms6948_ReturnType Adbms6948_Int_TrigI1ADC(Adbms6948_TrigI1ADCInputs*, uint8_t)	24	static
+Adbms6948_Measure.cpp:702:23:Adbms6948_ReturnType Adbms6948_Int_TrigI2ADC(Adbms6948_TrigI2ADCInputs*, uint8_t)	24	static
+Adbms6948_Measure.cpp:781:23:Adbms6948_ReturnType Adbms6948_Int_TrigIVADC(Adbms6948_TrigIVADCInputs*, uint8_t)	24	static
+Adbms6948_Measure.cpp:866:23:Adbms6948_ReturnType Adbms6948_Int_ReadCADCConvCnt(uint16_t*, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:944:23:Adbms6948_ReturnType Adbms6948_Int_ReadI1ADCConvCnt(uint16_t*, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:1025:22:Adbms6948_ReturnType Adbms6948_Int_ReadVoltageCurrentCTValues(uint16_t*, uint16_t*, Adbms6948_SnapSelType, uint8_t)	32	static
+Adbms6948_Measure.cpp:1109:23:Adbms6948_ReturnType Adbms6948_Int_ReadCellVolt(Adbms6948_CellMeasDataType, Adbms6948_CellGrpSelType, int16_t*, Adbms6948_SnapSelType, uint8_t)	32	static
+Adbms6948_Measure.cpp:1190:22:Adbms6948_ReturnType Adbms6948_Int_ReadAllCellVolt(Adbms6948_CellMeasDataType, int16_t*, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:1265:23:Adbms6948_ReturnType Adbms6948_Int_ReadAllAverageCellVoltages(int16_t*, uint8_t)	24	static
+Adbms6948_Measure.cpp:1345:23:Adbms6948_ReturnType Adbms6948_Int_ReadGPIOInputVolt(Adbms6948_GpioMeasDataType, Adbms6948_GpioGrpSelType, int16_t*, uint8_t)	24	static
+Adbms6948_Measure.cpp:1423:23:Adbms6948_ReturnType Adbms6948_Int_ReadDevParam(Adbms6948_DevParamGrpSelType, int16_t*, uint8_t)	24	static
+Adbms6948_Measure.cpp:1508:23:Adbms6948_ReturnType Adbms6948_Int_ReadAllAuxStatusRegisters(int16_t*, int16_t*, Adbms6948_StatusRegValsType*, uint8_t)	32	static
+Adbms6948_Measure.cpp:1593:22:Adbms6948_ReturnType Adbms6948_Int_ReadCurrent(Adbms6948_CurrentMeasDataType, Adbms6948_CurrentSelType, int32_t*, Adbms6948_SnapSelType, uint8_t)	32	static
+Adbms6948_Measure.cpp:1671:22:Adbms6948_ReturnType Adbms6948_Int_ReadCADCI1ADC(int16_t*, int32_t*, Adbms6948_SnapSelType, uint8_t)	32	static
+Adbms6948_Measure.cpp:1757:23:Adbms6948_ReturnType Adbms6948_Int_ReadCellVoltCurrentAverage(int16_t*, int32_t*, boolean, uint16_t*, uint16_t*, uint8_t)	40	static
+Adbms6948_Measure.cpp:1833:23:Adbms6948_ReturnType Adbms6948_Int_SendCtrlCmd(Adbms6948_CtrlCmdSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:1905:23:Adbms6948_ReturnType Adbms6948_Int_PollADCStatus(Adbms6948_ADCSelType, boolean*, uint8_t)	24	static
+Adbms6948_Measure.cpp:1979:22:Adbms6948_ReturnType Adbms6948_Int_EnableCoulombCounter(boolean, uint8_t)	24	static
+Adbms6948_Measure.cpp:2051:22:Adbms6948_ReturnType Adbms6948_Int_ReadCoulombCountAndTimeBase(uint32_t*, uint16_t*, Adbms6948_SnapSelType, uint8_t)	32	static
+Adbms6948_Measure.cpp:2122:22:Adbms6948_ReturnType Adbms6948_Int_ClearAllFlags(uint8_t)	24	static
+Adbms6948_Measure.cpp:2186:22:Adbms6948_ReturnType Adbms6948_Int_ClearCellVoltageRegisters(Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:2256:22:Adbms6948_ReturnType Adbms6948_Int_ClearCurrentRegisters(Adbms6948_CurrentSelType, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:2326:30:Adbms6948_ReturnType Adbms6948_lReadCADCConvCnt(uint16_t*, Adbms6948_SnapSelType, uint8_t)	48	static
+Adbms6948_Measure.cpp:2390:30:Adbms6948_ReturnType Adbms6948_lReadI1ADCConvCnt(uint16_t*, Adbms6948_SnapSelType, uint8_t)	48	static
+Adbms6948_Measure.cpp:2453:30:Adbms6948_ReturnType Adbms6948_lReadVoltageCurrentCTValues(uint16_t*, uint16_t*, Adbms6948_SnapSelType, uint8_t)	48	static
+Adbms6948_Measure.cpp:2521:14:void Adbms6948_lGetCellCmdList(Adbms6948_CellMeasDataType, Adbms6948_CellGrpSelType, uint16_t*, uint8_t*, uint8_t)	32	static
+Adbms6948_Measure.cpp:2567:14:void Adbms6948_lGetCellCmd(Adbms6948_CellMeasDataType, Adbms6948_CellGrpSelType, uint16_t*, uint8_t)	16	static
+Adbms6948_Measure.cpp:2609:30:Adbms6948_ReturnType Adbms6948_lReadCellVolt(Adbms6948_CellMeasDataType, Adbms6948_CellGrpSelType, int16_t*, Adbms6948_SnapSelType, uint8_t)	136	static
+Adbms6948_Measure.cpp:2709:30:Adbms6948_ReturnType Adbms6948_lReadAllCellVolt(Adbms6948_CellMeasDataType, int16_t*, Adbms6948_SnapSelType, uint8_t)	80	static
+Adbms6948_Measure.cpp:2793:30:Adbms6948_ReturnType Adbms6948_lReadAllAverageCellVoltages(int16_t*, uint8_t)	88	static
+Adbms6948_Measure.cpp:2890:30:Adbms6948_ReturnType Adbms6948_lReadCurrent(Adbms6948_CurrentMeasDataType, Adbms6948_CurrentSelType, int32_t*, Adbms6948_SnapSelType, uint8_t)	56	static
+Adbms6948_Measure.cpp:3037:29:Adbms6948_ReturnType Adbms6948_lReadCADCI1ADC(int16_t*, int32_t*, Adbms6948_SnapSelType, uint8_t)	104	static
+Adbms6948_Measure.cpp:3133:30:Adbms6948_ReturnType Adbms6948_lReadCellVoltCurrentAverage(int16_t*, int32_t*, boolean, uint16_t*, uint16_t*, uint8_t)	120	static
+Adbms6948_Measure.cpp:3257:14:void Adbms6948_lGetGPIOCmdList(Adbms6948_GpioMeasDataType, Adbms6948_GpioGrpSelType, uint16_t*, uint8_t*)	32	static
+Adbms6948_Measure.cpp:3303:30:Adbms6948_ReturnType Adbms6948_lReadGPIOInputVolt(Adbms6948_GpioMeasDataType, Adbms6948_GpioGrpSelType, int16_t*, uint8_t)	88	static
+Adbms6948_Measure.cpp:3363:14:void Adbms6948_lGetDevParamCmdList(Adbms6948_DevParamGrpSelType, uint16_t*, uint8_t*)	32	static
+Adbms6948_Measure.cpp:3407:30:Adbms6948_ReturnType Adbms6948_lReadDevParam(Adbms6948_DevParamGrpSelType, int16_t*, uint8_t)	72	static
+Adbms6948_Measure.cpp:3474:30:Adbms6948_ReturnType Adbms6948_lReadAllAuxStatusRegisters(int16_t*, int16_t*, Adbms6948_StatusRegValsType*, uint8_t)	112	static
+Adbms6948_Measure.cpp:3606:14:void Adbms6948_lGetCtrlCmdCode(Adbms6948_CtrlCmdSelType, uint16_t*, boolean*)	24	static
+Adbms6948_Measure.cpp:3686:14:void Adbms6948_lGetPollADCCmdCode(Adbms6948_ADCSelType, uint16_t*)	16	static
+Adbms6948_Measure.cpp:3738:30:Adbms6948_ReturnType Adbms6948_lPollADCStatus(uint16_t, boolean*, uint8_t)	56	static
+Adbms6948_Measure.cpp:3793:13:void Adbms6948_lSendSnap(uint8_t)	24	static
+Adbms6948_Measure.cpp:3813:13:void Adbms6948_lSendUnsnap(uint8_t)	24	static
+Adbms6948_Measure.cpp:3844:29:Adbms6948_ReturnType Adbms6948_lReadCoulombCountAndTimeBase(uint32_t*, uint16_t*, Adbms6948_SnapSelType, uint8_t)	56	static
+Adbms6948_Measure.cpp:3904:29:Adbms6948_ReturnType Adbms6948_lClearFlags(uint8_t)	32	static
+Adbms6948_Measure.cpp:3945:29:Adbms6948_ReturnType Adbms6948_lClearCellVoltageRegisters(Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:3998:29:Adbms6948_ReturnType Adbms6948_lClearCurrentRegisters(Adbms6948_CurrentSelType, Adbms6948_SnapSelType, uint8_t)	24	static
+Adbms6948_Measure.cpp:4061:17:boolean Adbms6948_lIsInvalidCellOWSelType(Adbms6948_CellOWSelType)	24	static
+Adbms6948_Measure.cpp:4091:17:boolean Adbms6948_lIsInvalidAuxChSelType(Adbms6948_AuxChSelType)	24	static
+Adbms6948_Measure.cpp:4136:17:boolean Adbms6948_lIsInvalidRedAuxChSelType(Adbms6948_RedAuxChSelType)	24	static
+Adbms6948_Measure.cpp:4175:17:boolean Adbms6948_lIsInvalidCellMeasDataType(Adbms6948_CellMeasDataType)	24	static
+Adbms6948_Measure.cpp:4205:17:boolean Adbms6948_lIsInvalidCurrentMeasDataType(Adbms6948_CurrentMeasDataType)	24	static
+Adbms6948_Measure.cpp:4231:17:boolean Adbms6948_lIsInvalidCellGrpSelType(Adbms6948_CellGrpSelType)	24	static
+Adbms6948_Measure.cpp:4262:17:boolean Adbms6948_lIsInvalidCurrentSelType(Adbms6948_CurrentSelType)	24	static
+Adbms6948_Measure.cpp:4289:17:boolean Adbms6948_lIsInvalidGpioMeasDataType(Adbms6948_GpioMeasDataType)	24	static
+Adbms6948_Measure.cpp:4315:17:boolean Adbms6948_lIsInvalidGpioGrpSelType(Adbms6948_GpioGrpSelType)	24	static
+Adbms6948_Measure.cpp:4345:17:boolean Adbms6948_lIsInvalidDevParamGrpSelType(Adbms6948_DevParamGrpSelType)	24	static
+Adbms6948_Measure.cpp:4373:17:boolean Adbms6948_lIsInvalidCtrlCmdSelType(Adbms6948_CtrlCmdSelType)	24	static
+Adbms6948_Measure.cpp:4410:17:boolean Adbms6948_lIsInvalidADCSelType(Adbms6948_ADCSelType)	24	static

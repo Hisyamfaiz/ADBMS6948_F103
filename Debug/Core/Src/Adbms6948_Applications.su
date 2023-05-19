@@ -1,0 +1,19 @@
+Adbms6948_Applications.cpp:105:6:void Adbms_Delay(uint32_t)	16	static
+Adbms6948_Applications.cpp:110:10:uint32_t Adbms_Timer_GetTick()	8	static
+Adbms6948_Applications.cpp:115:6:void Adbms6948_SPI_Lock()	4	static
+Adbms6948_Applications.cpp:116:6:void Adbms6948_SPI_Unlock()	4	static
+Adbms6948_Applications.cpp:118:6:void Adbms6948_SPI_Read(uint8_t*, uint16_t)	16	static
+Adbms6948_Applications.cpp:123:6:void Adbms6948_SPI_Write(uint8_t*, uint16_t)	16	static
+Adbms6948_Applications.cpp:128:6:void Adbms6948_SPI_WriteRead(uint8_t*, uint8_t*, uint16_t)	40	static
+Adbms6948_Applications.cpp:140:6:void Adbms_Init(void*)	16	static
+Adbms6948_Applications.cpp:160:6:void Adbms_Run(void*)	16	static
+Adbms6948_Applications.cpp:179:6:void Adbms6948_read_config(uint8_t, int)	16	static
+Adbms6948_Applications.cpp:189:6:void Adbms6948_measure_cells(uint8_t, int)	40	static
+Adbms6948_Applications.cpp:221:6:void Adbms6948_measure_current(uint8_t, int)	32	static
+Adbms6948_Applications.cpp:242:6:void Adbms6948_measure_schannel(uint8_t, int)	56	static
+Adbms6948_Applications.cpp:268:6:void Adbms6948_measure_average_cell(uint8_t, int)	80	static
+Adbms6948_Applications.cpp:299:6:void Adbms6948_trig_cont_measurement(uint8_t, int)	24	static
+Adbms6948_Applications.cpp:318:6:void Adbms6948_read_cont_measurement(uint8_t, int, uint8_t)	32	static
+Adbms6948_Applications.cpp:334:6:void Adbms6948_measure_aux_voltage(uint8_t, int)	40	static
+Adbms6948_Applications.cpp:353:6:void Adbms6948_measure_status_voltage(uint8_t, int)	32	static
+Adbms6948_Applications.cpp:371:6:void Adbms6948_Discharge_Cell(uint16)	16	static

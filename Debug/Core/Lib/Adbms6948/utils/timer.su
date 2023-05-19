@@ -1,0 +1,4 @@
+timer.cpp:11:28:void Adbms_Delay(uint32_t)	16	static
+timer.cpp:16:28:void Adbms_Delay_us(uint32_t)	16	static
+timer.cpp:23:32:uint32_t Adbms_Timer_GetTick()	4	static
+timer.cpp:28:10:uint32_t Adbms_Timer_RemainingTime(Adbms_Timer_t*)	24	static

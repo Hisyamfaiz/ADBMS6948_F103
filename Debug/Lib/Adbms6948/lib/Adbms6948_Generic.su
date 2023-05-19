@@ -1,0 +1,5 @@
+Adbms6948_Generic.cpp:95:23:Adbms6948_ReturnType Adbms6948_Int_ReadDriverVersion(Adbms6948_VersionInfoType*)	24	static
+Adbms6948_Generic.cpp:161:22:Adbms6948_ReturnType Adbms6948_Int_OverVoltEval(uint16_t*, Adbms6948_OVThresCfgType*, Adbms6948_OVEvalType*, uint8_t)	32	static
+Adbms6948_Generic.cpp:255:22:Adbms6948_ReturnType Adbms6948_Int_UnderVoltEval(uint16_t*, Adbms6948_UVThresCfgType*, Adbms6948_UVEvalType*, uint8_t)	32	static
+Adbms6948_Generic.cpp:340:23:Adbms6948_ReturnType Adbms6948_Int_ReadErrorCounts(Adbms6948_ErrorCounts*, uint8_t)	32	static
+Adbms6948_Generic.cpp:407:23:Adbms6948_ReturnType Adbms6948_Int_ClearErrorCounts(uint8_t)	24	static

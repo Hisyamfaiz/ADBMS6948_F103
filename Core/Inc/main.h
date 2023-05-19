@@ -98,14 +98,8 @@ void Error_Handler(void);
 #define LED_GPIO_Port GPIOC
 #define GATE_MOS_Pin GPIO_PIN_8
 #define GATE_MOS_GPIO_Port GPIOA
-#define CSBI_Pin GPIO_PIN_12
-#define CSBI_GPIO_Port GPIOC
-#define SCK_Pin GPIO_PIN_3
-#define SCK_GPIO_Port GPIOB
-#define SDO_Pin GPIO_PIN_4
-#define SDO_GPIO_Port GPIOB
-#define SDI_Pin GPIO_PIN_5
-#define SDI_GPIO_Port GPIOB
+#define SPI1_CS_Pin GPIO_PIN_12
+#define SPI1_CS_GPIO_Port GPIOC
 #define OLED_SCL_Pin GPIO_PIN_6
 #define OLED_SCL_GPIO_Port GPIOB
 #define OLED_SDA_Pin GPIO_PIN_7
@@ -117,12 +111,13 @@ void BMS_Init(void);
 void BMS_ScreenMode_Standby(void);
 void BMS_ScreenMode_RUN(void);
 
+uint16_t get_balance_status(float Cell_Voltage_10data[10]);
 // Deklarasi variabel komunikasi LTC6804
-uint8_t		CFGR4,
-			CFGR5;
-uint8_t		rd_config[1][8];
-uint16_t	cell_voltage[3][12];
-uint8_t		RDCVA[2], PEC[2];
+//uint8_t		CFGR4,
+//			CFGR5;
+//uint8_t		rd_config[1][8];
+//uint16_t	cell_voltage[3][12];
+//uint8_t		RDCVA[2], PEC[2];
 
 // Variabel Read ADC
 uint16_t 	adc_value[7];
@@ -174,8 +169,8 @@ float		batas_atas,batas_bawah,
 			SOC_manipulasi,
 			grad,
 			constanta;
-float 		AH_Consumption,
-			AH_Total;
+extern float 	AH_Consumption,
+				AH_Total;
 
 // PROTECTION VARIABLE
 uint8_t	fault_code,
@@ -201,7 +196,6 @@ uint8_t Clear_Trip_undervoltage,
 
 //variable baterai dan SOC
 float	Pack_SOC,
-		SOC_manipulasi,
 		Delta_VCell,
 		Bat_Pow_Out;
 /* USER CODE END Private defines */

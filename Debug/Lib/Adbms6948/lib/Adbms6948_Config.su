@@ -1,0 +1,17 @@
+Adbms6948_Config.cpp:98:23:Adbms6948_ReturnType Adbms6948_Int_Init(const Adbms6948_CfgType*)	24	static
+Adbms6948_Config.cpp:178:23:Adbms6948_ReturnType Adbms6948_Int_DeInit()	16	static
+Adbms6948_Config.cpp:268:23:Adbms6948_ReturnType Adbms6948_Int_CfgSoakControl(boolean*, uint8_t)	32	static
+Adbms6948_Config.cpp:351:23:Adbms6948_ReturnType Adbms6948_Int_CfgSoakTime(Adbms6948_AuxSoakTimeCfgType*, uint8_t)	32	static
+Adbms6948_Config.cpp:440:23:Adbms6948_ReturnType Adbms6948_Int_CfgOVThreshold(Adbms6948_OVThresCfgType*, uint8_t)	40	static
+Adbms6948_Config.cpp:534:23:Adbms6948_ReturnType Adbms6948_Int_CfgUVThreshold(Adbms6948_UVThresCfgType*, uint8_t)	40	static
+Adbms6948_Config.cpp:624:23:Adbms6948_ReturnType Adbms6948_Int_CfgIIRFilter(Adbms6948_IIRCornerFreqType*, uint8_t)	32	static
+Adbms6948_Config.cpp:710:23:Adbms6948_ReturnType Adbms6948_Int_CfgCSCompThresVolt(Adbms6948_CSThresVoltType*, uint8_t)	32	static
+Adbms6948_Config.cpp:796:23:Adbms6948_ReturnType Adbms6948_Int_CfgGpioPins(Adbms6948_GpioPinCfgType*, uint8_t)	40	static
+Adbms6948_Config.cpp:888:22:Adbms6948_ReturnType Adbms6948_Int_CfgCoulombCounter(uint16_t*, uint8_t)	32	static
+Adbms6948_Config.cpp:967:22:Adbms6948_ReturnType Adbms6948_Int_CfgOC1Params(Adbms6948_OC1CfgType*, uint8_t)	24	static
+Adbms6948_Config.cpp:1036:23:Adbms6948_ReturnType Adbms6948_Int_CfgOC2Params(Adbms6948_OC2CfgType*, uint8_t)	24	static
+Adbms6948_Config.cpp:1098:17:boolean Adbms6948_lIsInvalidConfig(const Adbms6948_CfgType*)	24	static
+Adbms6948_Config.cpp:1142:14:void Adbms6948_lPrepareChain(uint8_t)	24	static
+Adbms6948_Config.cpp:1160:17:boolean Adbms6948_lIsAnyOfChainsBusy()	16	static
+Adbms6948_Config.cpp:1198:29:Adbms6948_ReturnType Adbms6948_lCfgOC1Params(Adbms6948_OC1CfgType*, uint8_t)	72	static
+Adbms6948_Config.cpp:1309:29:Adbms6948_ReturnType Adbms6948_lCfgOC2Params(Adbms6948_OC2CfgType*, uint8_t)	72	static
