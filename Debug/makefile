@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := BMS10S10P-F103RG
+BUILD_ARTIFACT_NAME := ADBMS6948_F103
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-BMS10S10P-F103RG.elf \
+ADBMS6948_F103.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-BMS10S10P-F103RG.list \
+ADBMS6948_F103.list \
 
 OBJCOPY_BIN += \
-BMS10S10P-F103RG.bin \
+ADBMS6948_F103.bin \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: BMS10S10P-F103RG.elf secondary-outputs
+main-build: ADBMS6948_F103.elf secondary-outputs
 
 # Tool invocations
-BMS10S10P-F103RG.elf: $(OBJS) $(USER_OBJS) C:\Users\faiz_\git\F103RG_BMS10S13P\STM32F103RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "BMS10S10P-F103RG.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\faiz_\git\F103RG_BMS10S13P\STM32F103RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BMS10S10P-F103RG.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+ADBMS6948_F103.elf: $(OBJS) $(USER_OBJS) C:\Users\faiz_\STM32CubeIDE\workspace_1.7.0\ADBMS6948_F103\STM32F103RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "ADBMS6948_F103.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\faiz_\STM32CubeIDE\workspace_1.7.0\ADBMS6948_F103\STM32F103RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADBMS6948_F103.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,19 +70,19 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-BMS10S10P-F103RG.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "BMS10S10P-F103RG.list"
+ADBMS6948_F103.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "ADBMS6948_F103.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-BMS10S10P-F103RG.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "BMS10S10P-F103RG.bin"
+ADBMS6948_F103.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "ADBMS6948_F103.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) BMS10S10P-F103RG.bin BMS10S10P-F103RG.elf BMS10S10P-F103RG.list default.size.stdout
+	-$(RM) ADBMS6948_F103.bin ADBMS6948_F103.elf ADBMS6948_F103.list default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
