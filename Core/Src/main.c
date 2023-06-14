@@ -59,15 +59,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int test;
 char 	buff_lcd[20];	//variable buff lcd-oled
-uint8_t	BATT_State;
-uint8_t BATT_Start_Up = 0;
 char	lower_UNIQUE_Code[5],
 		UPPER_UNIQUE_Code[5];
-
-int Sleep_tick=10000,
-	Shutdown_tick=15000;
+uint8_t	BATT_State;
+uint8_t BATT_Start_Up = 0;
 
 /* USER CODE END PV */
 
@@ -79,11 +75,16 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char pesan[20];
 const uint8_t knChainId = 0u;
 int nRet = 0;
 float CellVoltage[16], Current;
-float sum_voltage, pack_voltage;
+float pack_voltage;
+const float Cell_UnderVoltage_Threshold = 2.7;
+const float Cell_OverVoltage_Threshold = 4.2;
+
+//Variabel timer sleep and shutdown ketika tidak menerima CAN
+int Sleep_tick=10000,
+	Shutdown_tick=15000;
 /* USER CODE END 0 */
 
 /**
@@ -138,39 +139,31 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  //Read voltage per-cell and total voltage
 	  Adbms6948_measure_cells(knChainId, nRet);
-	  HAL_Delay(1);
-	  for(uint8_t ij=0; ij<10; ij++){
-		  pack_voltage += CellVoltage[ij];
-	  }
-	  sum_voltage = pack_voltage;
-	  pack_voltage = 0;
+	  pack_voltage = Calculate_Pack_Voltage (CellVoltage);
+
+	  //Onder & Over voltage per-cell protection
+	  isCell_UnderVoltage(CellVoltage);
+	  isCell_OverVoltage(CellVoltage);
 
 	  //Read Current
 	  Adbms6948_measure_current(knChainId, nRet);
-	  HAL_Delay(1);
 
 	  //comparing cell voltage to get
 	  unbalance_cell = get_balance_status(CellVoltage);
 
-	  // Balancing Process
-	  if(BMS_mode == 2 && IBATT < -0.1 && (VBATT > VBATT_BALANCE_START))     //arus charging 0.1 tidak perlu di balancing
-	  {
-//		  Adbms6948_discharge_cell(balance_status);
+	  // Balancing Process (arus charging 0.1 tidak perlu di balancing)
+	  if(BMS_mode == 2 && IBATT < -0.1 && (VBATT > VBATT_BALANCE_START)) {
+		  Adbms6948_Discharge_Cell(balance_status);
 	  }
-	  else
-	  {
-		  balance_status = 0;
-//		  Adbms6948_Discharge_Cell(0);
+	  else {
+		  Adbms6948_Discharge_Cell(0);
 	  }
 
-	  Adbms6948_Discharge_Cell(8);
-
-	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	  HAL_Delay(50);
+	  LED_Toggle;
+	  HAL_Delay(10);
 
 	  BMS_ScreenMode_RUN();
 	  HAL_IWDG_Refresh(&hiwdg);
-	  test++;
   }
   /* USER CODE END 3 */
 }
@@ -229,20 +222,9 @@ void BMS_Init(void)
 		UPPER_UNIQUE_Code[ii] = toupper(lower_UNIQUE_Code[ii]);
 		ii++;
 	}
-
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1);
-	HAL_Delay(500);
-	HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-	HAL_Delay(500);
-	HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
-	HAL_Delay(100);
-
+	//beep startup indicator
+	StartUp_Buzzer();
+	//ADBMS6948 initialization
 	Adbms_Init(NULL);
 
 	SSD1306_Init();
@@ -266,17 +248,16 @@ void BMS_Init(void)
 	Batt_Open_Mode();
 	BATT_Start_Up = 1;
 	flag_start_shutdown = 0;
-	HAL_Delay(50);
+	HAL_Delay(1);
 	EEPROM_isDeviceReady(0xA0);
 	BMS_CAN_Config();
-	HAL_Delay(100);
+	HAL_Delay(10);
 }
 
 void BMS_ScreenMode_RUN(void)
 {
 	if(flag_start_shutdown == 0)
 	{
-
 		SSD1306_Fill(SSD1306_COLOR_BLACK);
 		sprintf(buff_lcd,"RUNNING");
 		SSD1306_GotoXY(40,18);
@@ -287,74 +268,36 @@ void BMS_ScreenMode_RUN(void)
 		SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
 		SSD1306_UpdateScreen();
 
-
-		OFFSET_SENSOR_ARUS=IBATT_for_offset_cal;
 		Batt_Open_Mode();
-
-		flag_trip_overtemperature=OFF;
-		flag_trip_undertemperature=OFF;
-		flag_trip_SOCOverDischarge=OFF;
-		flag_trip_SOCOverCharge=OFF;			//di tiada kan..!
-		flag_trip_undervoltage=OFF;
-		flag_trip_overvoltage=OFF;
-		flag_trip_overcurrentdischarge=OFF;
-		flag_trip_overcurrentcharge=OFF;
-		flag_trip_shortcircuit=OFF;
-		flag_trip_systemfailure=OFF;
-		flag_trip_unbalance=OFF;
-		flag_get_UNIQUECODE=OFF;
-		OFFSET_SENSOR_ARUS=IBATT_for_offset_cal;
+		Reset_FlagProtection();
 
 		if(last_flag_start_shutdown==1) Shutdown_time_last = HAL_GetTick();
 
 		// Automatic sleep after 30s without receive CAN
 		Shutdown_time=HAL_GetTick();
-		if(Shutdown_time-Shutdown_time_last>Shutdown_tick)
-		{
-//			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-//			HAL_Delay(100);
-//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-//			HAL_Delay(100);
-//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-//			HAL_Delay(100);
-//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-//			HAL_Delay(100);
-//			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-//			HAL_Delay(750);
-//			HAL_GPIO_WritePin(BMS_SHUTDOWN_GPIO_Port, BMS_SHUTDOWN_Pin, 1);
+		if(Shutdown_time-Shutdown_time_last>Shutdown_tick){
+			ShutDown_Buzzer();
+			HAL_GPIO_WritePin(BMS_SHUTDOWN_GPIO_Port, BMS_SHUTDOWN_Pin, 1);
 		}
-
 		last_flag_start_shutdown = 0;
 	}
-	else
-	{
 
+	else {
 		SSD1306_Fill(SSD1306_COLOR_BLACK);
-
 		if(BATT_State==STATE_CHARGE)
-		{
 			sprintf(buff_lcd,"RUN (C) - %05s", UPPER_UNIQUE_Code);
-			SSD1306_GotoXY(0,0);
-			SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
-		}
+
 		else if(BATT_State==STATE_DISCHARGE)
-		{
 			sprintf(buff_lcd,"RUN (D) - %05s", UPPER_UNIQUE_Code);
-			SSD1306_GotoXY(0,0);
-			SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
-		}
+
 		else if(BATT_State==STATE_FULL_CHARGE_DISCHARGE)
-		{
 			sprintf(buff_lcd,"RUN (C/D) - %05s", UPPER_UNIQUE_Code);
-			SSD1306_GotoXY(0,0);
-			SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
-		}
+
 		else if(BATT_State==STATE_STANDBY)
-		{
 			sprintf(buff_lcd,"RUN (Open) - %05s", UPPER_UNIQUE_Code);
-			SSD1306_GotoXY(0,0);
-			SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
-		}
+
+		SSD1306_GotoXY(0,0);
+		SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
 
 		sprintf(buff_lcd,"V=%6.2f I=%6.2f",VBATT, IBATT);
 		SSD1306_GotoXY(0,10);
@@ -368,8 +311,7 @@ void BMS_ScreenMode_RUN(void)
 		sprintf(buff_lcd,"B=%5d|%4.2f|%4.2f",unbalance_cell, persen_imbalance, OFFSET_SENSOR_ARUS);
 		SSD1306_GotoXY(0,40);
 		SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
-
-		sprintf(buff_lcd,"%d-%d--%4.2f| %5.0f",fault_code,last_fault_code,Isc, AH_Total);
+		sprintf(buff_lcd,"%d-%d--%4.2f| %5.0f",fault_code,last_fault_code,Isc, AH_Consumption);
 		SSD1306_GotoXY(0,50);
 		SSD1306_Puts(buff_lcd, &Font_7x10, SSD1306_COLOR_WHITE);
 
@@ -391,6 +333,20 @@ void BMS_ScreenMode_RUN(void)
 	}
 	HAL_Delay(1);
 }
+
+float Calculate_Pack_Voltage (float Cell_Voltage_10data[10])
+{
+	float sum_voltage;
+	float buffer_voltage;
+	for(uint8_t ij=0; ij<10; ij++){
+		buffer_voltage += Cell_Voltage_10data[ij];
+	}
+	sum_voltage = buffer_voltage;
+	buffer_voltage = 0;
+
+	return sum_voltage;
+}
+
 
 uint16_t get_balance_status(float Cell_Voltage_10data[10])
 {
@@ -419,6 +375,67 @@ uint16_t get_balance_status(float Cell_Voltage_10data[10])
 	}
 	persen_imbalance=buffer_imbalance*100/9.0/1.2;
 	return(balance_status);
+}
+
+void isCell_UnderVoltage(float Cell_Voltage_10data[10]){
+	for(uint8_t kl=0; kl<10; kl++){
+		if (CellVoltage[kl] < Cell_UnderVoltage_Threshold) {
+			fault_code = 15;
+			Batt_Open_Mode();
+			flag_trip_cellundervoltage = ON;
+			Cell_UnderVoltage = YES;
+		}
+		else Cell_UnderVoltage = NO;
+	}
+}
+
+void isCell_OverVoltage(float Cell_Voltage_10data[10]){
+	for(uint8_t kl=0; kl<10; kl++){
+		if (CellVoltage[kl] > Cell_OverVoltage_Threshold) {
+			fault_code = 16;
+			Batt_Open_Mode();
+			flag_trip_cellovervoltage = ON;
+			Cell_OverVoltage = YES;
+		}
+		else Cell_OverVoltage = NO;
+	}
+}
+
+void Reset_FlagProtection(void){
+	flag_trip_overtemperature=OFF;
+	flag_trip_undertemperature=OFF;
+	flag_trip_SOCOverDischarge=OFF;
+	flag_trip_SOCOverCharge=OFF;			//di tiada kan..!
+	flag_trip_undervoltage=OFF;
+	flag_trip_overvoltage=OFF;
+	flag_trip_overcurrentdischarge=OFF;
+	flag_trip_overcurrentcharge=OFF;
+	flag_trip_shortcircuit=OFF;
+	flag_trip_systemfailure=OFF;
+	flag_trip_unbalance=OFF;
+	flag_get_UNIQUECODE=OFF;
+	flag_trip_cellovervoltage = OFF;
+	flag_trip_cellundervoltage = OFF;
+}
+
+void StartUp_Buzzer(void)
+{
+	BUZZ_Write(1); HAL_Delay(500);
+	BUZZ_Toggle; HAL_Delay(500);
+	BUZZ_Toggle; HAL_Delay(100);
+	BUZZ_Toggle; HAL_Delay(100);
+	BUZZ_Toggle; HAL_Delay(100);
+	BUZZ_Write(0); HAL_Delay(100);
+}
+
+void ShutDown_Buzzer(void)
+{
+	BUZZ_Write(1); HAL_Delay(100);
+	BUZZ_Toggle; HAL_Delay(100);
+	BUZZ_Toggle; HAL_Delay(100);
+	BUZZ_Toggle; HAL_Delay(100);
+	BUZZ_Toggle; HAL_Delay(750);
+	BUZZ_Write(0); HAL_Delay(100);
 }
 /* USER CODE END 4 */
 

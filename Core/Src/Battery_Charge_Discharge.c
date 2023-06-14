@@ -17,16 +17,18 @@ extern float Pack_SOC, Delta_VCell,Bat_Pow_Out, Pack_Cap;
 extern uint16_t LifeTime;
 extern uint8_t BATT_State;
 
+//**************Discharge Operation Mode **********************//
 void Batt_Discharge_Mode(void)
 {
-	if(flag_trip_undervoltage==ON||
-			flag_trip_overtemperature==ON||
-			flag_trip_undertemperature==ON||
-			flag_trip_overcurrentdischarge==ON||
-			flag_trip_SOCOverDischarge==ON||
-			flag_trip_shortcircuit==ON||
-			flag_trip_unbalance==ON||
-			flag_trip_systemfailure==ON)
+	if(flag_trip_undervoltage==ON				||
+			flag_trip_overtemperature==ON		||
+			flag_trip_undertemperature==ON		||
+			flag_trip_overcurrentdischarge==ON	||
+			flag_trip_SOCOverDischarge==ON		||
+			flag_trip_shortcircuit==ON			||
+			flag_trip_unbalance==ON				||
+			flag_trip_systemfailure==ON			||
+			flag_trip_cellundervoltage == ON)
 	{
 		Batt_Open_Mode();
 	}
@@ -40,19 +42,19 @@ void Batt_Discharge_Mode(void)
 		sleep_state=0;
 		flag_write_cycle = 0;
 	}
-
-
 }
 
+//**************Charge Operation Mode **********************//
 void Batt_Charge_Mode(void)
 {
-	if(flag_trip_overvoltage==ON			||
+	if(		flag_trip_overvoltage==ON		||
 			flag_trip_overtemperature==ON	||
 			flag_trip_undertemperature==ON	||
 			flag_trip_overcurrentcharge==ON	||
 			flag_trip_SOCOverCharge==ON		||
 			flag_trip_shortcircuit==ON		||
-			flag_trip_systemfailure==ON		)
+			flag_trip_systemfailure==ON		||
+			flag_trip_cellovervoltage == ON )
 	{
 		Batt_Open_Mode();
 	}
@@ -73,6 +75,7 @@ void Batt_Charge_Mode(void)
 
 }
 
+//**************Charge-Discharge Operation Mode **********************//
 void Batt_Full_CD_Mode(void)
 {
 	if(flag_trip_undervoltage==ON			||
@@ -100,6 +103,7 @@ void Batt_Full_CD_Mode(void)
 	}
 }
 
+//**************Stanby Operation Mode **********************//
 void Batt_Open_Mode(void)
 {
 	HAL_GPIO_WritePin(GATE_MOS_GPIO_Port, GATE_MOS_Pin, GPIO_PIN_RESET);
@@ -108,11 +112,12 @@ void Batt_Open_Mode(void)
 	discharge_state=0;
 	sleep_state=1;
 
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
+	BUZZ_Write(0);
 
 	check_SOC_Based_OCV();
 }
 
+//************** SOC Calculation - OCV Based **********************//
 void check_SOC_Based_OCV(void)
 {
 	if(VBATT <= 51.3){

@@ -231,7 +231,7 @@ void Adbms6948_measure_current(const uint8_t knChainId, int nRet)
 				&nCurrent,
 				ADBMS6948_SEND_NONE,
 				knChainId);
-		Current = (float) (nCurrent)*0.000415f - 0.0326;
+		Current = (float) (nCurrent)*0.000445f - 0.0326;
 	}
 
 	else {

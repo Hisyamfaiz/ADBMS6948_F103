@@ -33,11 +33,12 @@
 #define maxdata 200				//jumlah sampling rata-rata ADC
 #define interval_hitungsuhu 200	//delay update nilai sensor suhu = 10 x periode timer 2
 
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
-uint16_t testtim2, testtim3;
+
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -72,53 +73,52 @@ extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN EV */
+
 // Deklarasi fungsi proteksi
 void Batt_Protection_when_discharge(void);
 void Batt_Protection_when_charge(void);
 void Batt_Protection_when_chargedischarge(void);
 
 // Variabel bantu
-uint16_t	hitung_suhu;
-uint32_t	sum_datadigi_suhu1, sum_datadigi_suhu2, sum_datadigi_suhu3,sum_datadigi_suhu4, sum_datadigi_suhu5, sum_datadigi_suhu6;
-uint16_t	datadigi_suhu1, datadigi_suhu2, datadigi_suhu3, datadigi_suhu4;
+uint16_t	hitung_suhu, i;
 uint8_t 	Tick_BattId, Tick_33ms;
-uint16_t	test;
 
+//Variabel tegangan arus
+extern float pack_voltage, Current;
+float		 sum_current;
 
-//Variabel Kalkulasi sensor arus
-int			sumI, i;
-uint16_t	i_arrdata[maxdata];
-float		OFFSET_SENSOR_ARUS,IBATT_for_offset_cal;
-float		sum_current;
-extern float sum_voltage;
+//Battery Pack Rated Capacity
+const float Pack_Cap = 54;
 
 // Parameter tambahan baterai
 float 		AH_Consumption, AH_Total=0;
 uint16_t 	time_soc;
 uint32_t 	cek_CC=0;
-float 		Pack_Cap = 54;
+
 uint8_t		BATT_State;
 uint8_t 	BATT_Start_Up;
 
 // Variable setting proteksi
-float 	I_Over_Set=50,
-		I_Over_Set_Charge=20,
-		Temp_Over_Set=55,
-		Temp_Under_Set=10,
-		SOC_Under_Set=0,
-		SOC_Over_Set=120,
-		V_Under_Set=29,
-		V_Over_Set=45,
+float 	I_Over_Set = 50,
+		I_Over_Set_Charge = 20,
+		Disc_OverTemp = 55,
+		Chg_OverTemp = 45,
+		Temp_Under_Set = 10,
+		SOC_Under_Set = 0,
+		SOC_Over_Set = 120,
+		V_Under_Set = 29,
+		V_Over_Set = 45,
 		Persen_Imbalance_Set=20;
 
 //Variable bantu proteksi
 float	TMS=0.5;
 float 	TMS_I_Over=120;
 float 	T_Under_trip,
-T_trip_cycle;
+		T_trip_cycle;
 uint8_t Clear_Trip_undervoltage,
-Clear_Trip_overcurrentdischarge;
-
+		Clear_Trip_overcurrentdischarge;
+uint16_t test_timer;
+float SOC_Flow;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -298,35 +298,9 @@ void TIM2_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
 	hitung_suhu++;
-	test_tim2++;
 
-	//Moving Average
-	sumI=sumI-i_arrdata[i];		//menghapus sample data pertama/data lama
-	i_arrdata[i]=adc_value[4];	//save nilai ADC dari variable DMA
-	sumI=sumI+i_arrdata[i];		//menambahkan sample data paling baru
-	i_datadigi=sumI/maxdata;	//menghitung rata-rata
-
-	//  sum_datadigi_suhu1+=adc_value[0];
-	//  sum_datadigi_suhu1+=adc_value[1];
-	//  sum_datadigi_suhu2+=adc_value[2];
-	//  sum_datadigi_suhu3+=adc_value[3];
-	//  sum_datadigi_suhu5+=adc_value[5];
-	//  sum_datadigi_suhu6+=adc_value[6];
-	// *************PROSES Konversi dari DATA ADC ke Data Real *******************************/////
-
-	VBATT = sum_voltage;
-	if(VBATT<0) VBATT=-1;
-
-	if(UNIQUE_Code == 0x00A21) {
-		IBATT = 0.062151574718308*i_datadigi - 121.796885042846 - OFFSET_SENSOR_ARUS; // Modul B fix
-		IBATT_for_offset_cal= 0.062151574718308*i_datadigi - 121.796885042846;
-	}
-
-	else if (UNIQUE_Code == 0x00A22) {
-		IBATT = 0.0635607965300084*i_datadigi - 126.923575896323 - OFFSET_SENSOR_ARUS; // Modul B fix
-		IBATT_for_offset_cal= 0.0635607965300084*i_datadigi - 126.923575896323;
-	}
-	IBATT = 0;
+	VBATT = pack_voltage;
+	IBATT = Current;
 
 	if(hitung_suhu >= interval_hitungsuhu) {
 
@@ -372,7 +346,7 @@ void TIM2_IRQHandler(void)
 
 		//********************* Clearing protection status *****************************////
 		// ---> Clearing UnderVoltage
-		if(((Clear_Trip_undervoltage==1)||(VBATT>54))&&flag_trip_undervoltage==ON){
+		if(((Clear_Trip_undervoltage==1)||(VBATT>30))&&flag_trip_undervoltage==ON){
 			flag_trip_undervoltage=OFF;
 			Clear_Trip_undervoltage=0;
 		}
@@ -382,7 +356,7 @@ void TIM2_IRQHandler(void)
 			Clear_Trip_overcurrentdischarge=0;
 		}
 		// ---> Clearing OverTemperature
-		if(flag_trip_overtemperature==ON && (Suhu_T1<40)&&(Suhu_T2<50)&&(Suhu_T3<40)&&(Suhu_T4<50)){
+		if(flag_trip_overtemperature==ON && (Suhu_T1<45)&&(Suhu_T2<45)&&(Suhu_T3<45)&&(Suhu_T4<45)){
 			flag_trip_overtemperature=OFF;
 		}
 		// ---> Clearing UnderTemperature
@@ -390,33 +364,45 @@ void TIM2_IRQHandler(void)
 			flag_trip_undertemperature=OFF;
 		}
 		// ---> Clearing OverDischarge
-		if(flag_trip_SOCOverDischarge==ON && Pack_SOC>20){
+		if(flag_trip_SOCOverDischarge==ON && Pack_SOC>0){
 			flag_trip_SOCOverDischarge=OFF;
 		}
 		// ---> Clearing OverCharge
-		if(flag_trip_SOCOverCharge==ON && Pack_SOC<70){
+		if(flag_trip_SOCOverCharge==ON && Pack_SOC<100){
 			flag_trip_SOCOverCharge=OFF;
 		}
-	}
+		// ---> Clearing Cell Over Voltage
+		if(flag_trip_cellovervoltage==ON && Cell_OverVoltage == NO){
+			flag_trip_cellovervoltage = OFF;
+		}
+		// ---> Clearing Cell Under Voltage
+		if(flag_trip_cellundervoltage==ON && Cell_UnderVoltage == NO){
+			flag_trip_cellundervoltage = OFF;
+		}
 
+	}
 	i++;
 	i=i%maxdata;
 
 	//////////// Bagian Hitung SOC /////// SOC akan dihitung berdasarkan state baterai (Jika charge maupun discharge)
 	if(BATT_State==STATE_CHARGE||BATT_State==STATE_DISCHARGE||BATT_State==STATE_FULL_CHARGE_DISCHARGE)
 	{
+
 		time_soc++;
 		sum_current+=IBATT;
 		if(time_soc>99)
 		{
-			AH_Consumption = (-1*sum_current/100*(1.0/3600.0))/Pack_Cap*100-(4e-5); //Konsumsi System 4e-5
-			Pack_SOC=Pack_SOC+AH_Consumption;
-			time_soc=0;
-			sum_current=0;
+			AH_Consumption += (-1*sum_current)/100*(1.0/3600.0);
+			SOC_Flow = (AH_Consumption/Pack_Cap)*100;
+			Pack_SOC = Pack_SOC+SOC_Flow;
+			time_soc = 0;
+			sum_current = 0;
 
 			grad=(100-0)/(batas_atas-batas_bawah);
 			constanta=grad*batas_bawah*(-1);
 			SOC_manipulasi=grad*Pack_SOC+constanta;
+
+			test_timer++;
 		}
 	}
   /* USER CODE END TIM2_IRQn 1 */
@@ -432,7 +418,6 @@ void TIM3_IRQHandler(void)
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
-	testtim3++;
 	if(flag_start_shutdown==1){
 		if(Tick_33ms == 1) CANTX_BattParameter();
 		else if(Tick_33ms == 2) CANTX_BattProtection();
@@ -488,31 +473,13 @@ void Batt_Protection_when_discharge(void) {
 			flag_trip_undervoltage=ON;
 			HAL_GPIO_WritePin(GATE_MOS_GPIO_Port, GATE_MOS_Pin, GPIO_PIN_RESET);
 		}
-
-		if(flag_trip_undervoltage==OFF) {
-			if(T_Under_trip-T_trip_cycle>15) {
-				if((test_tim2%1000)==0) {
-					BUZZ_Toggle;
-					test_tim2=0;
-				}
-			}
-			else if(T_Under_trip-T_trip_cycle>10) {
-				if((test_tim2%100)==0) {
-					BUZZ_Toggle;
-					test_tim2=0;
-				}
-			}
-			else if(T_Under_trip-T_trip_cycle>1) {
-				HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-			}
-		}
 	}
 
 	//************** OverCurrent Discharge **********************//
 	else if((IBATT-I_Over_Set)>0 && flag_trip_overcurrentdischarge==OFF) {   //Indikasi terjadi Over Current
 		fault_code=2;
-		T_I_Over_trip=50/(((IBATT/6.9)*(IBATT/6.9))-1);
-		//		T_I_Over_trip=TMS_I_Over/((IBATT/I_Over_Set)-1);
+		T_I_Over_trip=I_Over_Set/(((IBATT/6.9)*(IBATT/6.9))-1);
+//		T_I_Over_trip=TMS_I_Over/((IBATT/I_Over_Set)-1);
 		T_I_Over_trip_cycle+=0.01;
 
 		if(T_I_Over_trip_cycle>T_I_Over_trip && flag_trip_overcurrentdischarge==OFF) {
@@ -547,27 +514,27 @@ void Batt_Protection_when_discharge(void) {
 	}
 
 	//**************Pengecekan OverTemperature ****************************//
-	else if(((Suhu_T1>Temp_Over_Set)||(Suhu_T2>Temp_Over_Set)||(Suhu_T3>Temp_Over_Set)||(Suhu_T4>Temp_Over_Set)) && flag_trip_overtemperature==OFF) {
+	else if(((Suhu_T1>Disc_OverTemp)||(Suhu_T2>Disc_OverTemp)||(Suhu_T3>Disc_OverTemp)||(Suhu_T4>Disc_OverTemp)) && flag_trip_overtemperature==OFF) {
 		fault_code=3;
-		if(Suhu_T1>Temp_Over_Set && Suhu_T1<=Temp_Over_Set+1) {
+		if(Suhu_T1>Disc_OverTemp && Suhu_T1<=Disc_OverTemp+1) {
 			if((test_tim2%1000)==0) {
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set+1 && Suhu_T1<=Temp_Over_Set+2){
+		else if(Suhu_T1>Disc_OverTemp+1 && Suhu_T1<=Disc_OverTemp+2){
 			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set+2 && Suhu_T1<=Temp_Over_Set+3){
+		else if(Suhu_T1>Disc_OverTemp+2 && Suhu_T1<=Disc_OverTemp+3){
 			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set+3||Suhu_T2>Temp_Over_Set+3||Suhu_T3>Temp_Over_Set+3||Suhu_T4>Temp_Over_Set+3){
+		else if(Suhu_T1>Disc_OverTemp+3||Suhu_T2>Disc_OverTemp+3||Suhu_T3>Disc_OverTemp+3||Suhu_T4>Disc_OverTemp+3){
 			Batt_Open_Mode();
 			flag_trip_overtemperature=ON;
 			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
@@ -603,27 +570,27 @@ void Batt_Protection_when_discharge(void) {
 	}
 
 	//********************** SOC_OverDischarge****************************//
-	else if(Pack_SOC-SOC_Under_Set<=5 && flag_trip_SOCOverDischarge==OFF && BATT_State==STATE_DISCHARGE) {
+	else if(Pack_SOC <= SOC_Under_Set+5 && flag_trip_SOCOverDischarge==OFF && BATT_State==STATE_DISCHARGE) {
 		fault_code=5;
-		if(Pack_SOC<=SOC_Under_Set+5 && Pack_SOC>SOC_Under_Set+3){
+		if(Pack_SOC <= SOC_Under_Set+5 && Pack_SOC>SOC_Under_Set+3){
 			if((test_tim2%1000)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Pack_SOC<=SOC_Under_Set+3 && Pack_SOC>SOC_Under_Set+2){
+		else if(Pack_SOC <= SOC_Under_Set+3 && Pack_SOC>SOC_Under_Set+2){
 			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Pack_SOC<SOC_Under_Set+2 && Pack_SOC>=SOC_Under_Set){
+		else if(Pack_SOC <= SOC_Under_Set+2 && Pack_SOC>SOC_Under_Set){
 			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Pack_SOC<SOC_Under_Set){
+		else if(Pack_SOC <= SOC_Under_Set){
 			Batt_Open_Mode();
 			flag_trip_SOCOverDischarge=ON;
 			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
@@ -631,7 +598,7 @@ void Batt_Protection_when_discharge(void) {
 	}
 
 	//********************** Imbalance Checking Status ****************************//
-	else if(Persen_Imbalance_Set-persen_imbalance <= 5)
+	else if(persen_imbalance >= Persen_Imbalance_Set + 5)
 	{
 		fault_code=6;
 		if(persen_imbalance >= Persen_Imbalance_Set)
@@ -643,13 +610,15 @@ void Batt_Protection_when_discharge(void) {
 
 	//Clearing when data status is normal before system trip
 	else {
-		if(fault_code!=0)
+		if(fault_code!=0){
 			last_fault_code=fault_code;
+		}
 		fault_code=0;
-		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 		T_Under_trip=0;
 		T_trip_cycle=T_trip_cycle-0.001;
 		T_I_Over_trip_cycle-=0.001;
+		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+
 		if(T_trip_cycle<0)
 			T_trip_cycle=0;
 		if(T_I_Over_trip_cycle<0)
@@ -669,7 +638,7 @@ void Batt_Protection_when_charge(void){
 	}
 
 	//**************Pengecekan OverCharge****************************//
-	else if(SOC_Over_Set-Pack_SOC<=10 && flag_trip_SOCOverCharge==OFF) {
+	else if(Pack_SOC >= SOC_Over_Set-10 && flag_trip_SOCOverCharge==OFF) {
 		fault_code=7;
 		if(Pack_SOC>SOC_Over_Set){
 			Batt_Open_Mode();
@@ -679,27 +648,27 @@ void Batt_Protection_when_charge(void){
 	}
 
 	//**************Pengecekan OverTemperature ****************************//
-	else if(((Suhu_T1>Temp_Over_Set)||(Suhu_T2>Temp_Over_Set)||(Suhu_T3>Temp_Over_Set)||(Suhu_T4>Temp_Over_Set)) && flag_trip_overtemperature==OFF) {
-		fault_code=8;
-		if(Suhu_T1>Temp_Over_Set && Suhu_T1<=Temp_Over_Set+1) {
+	else if(((Suhu_T1>Chg_OverTemp)||(Suhu_T2>Chg_OverTemp)||(Suhu_T3>Chg_OverTemp)||(Suhu_T4>Chg_OverTemp)) && flag_trip_overtemperature==OFF) {
+		fault_code=3;
+		if(Suhu_T1>Chg_OverTemp && Suhu_T1<=Chg_OverTemp+1) {
 			if((test_tim2%1000)==0) {
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set+1 && Suhu_T1<=Temp_Over_Set+2){
+		else if(Suhu_T1>Chg_OverTemp+1 && Suhu_T1<=Chg_OverTemp+2){
 			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set+2 && Suhu_T1<=Temp_Over_Set+3){
+		else if(Suhu_T1>Chg_OverTemp+2 && Suhu_T1<=Chg_OverTemp+3){
 			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set+3||Suhu_T2>Temp_Over_Set+3||Suhu_T3>Temp_Over_Set+3||Suhu_T4>Temp_Over_Set+3){
+		else if(Suhu_T1>Chg_OverTemp+3||Suhu_T2>Chg_OverTemp+3||Suhu_T3>Chg_OverTemp+3||Suhu_T4>Chg_OverTemp+3){
 			Batt_Open_Mode();
 			flag_trip_overtemperature=ON;
 			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
@@ -781,13 +750,15 @@ void Batt_Protection_when_charge(void){
 
 	//Clearing when data status is normal before system trip
 	else {
-		if(fault_code!=0)
+		if(fault_code!=0){
 			last_fault_code=fault_code;
+		}
 		fault_code=0;
-		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 		T_Under_trip=0;
 		T_trip_cycle=T_trip_cycle-0.001;
 		T_I_Over_trip_cycle-=0.001;
+		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+
 		if(T_trip_cycle<0)
 			T_trip_cycle=0;
 		if(T_I_Over_trip_cycle<0)
@@ -795,103 +766,102 @@ void Batt_Protection_when_charge(void){
 	}
 }
 
+
 void Batt_Protection_when_chargedischarge(void) {
-	// Short circuit protection
-	if(IBATT > (VBATT/0.9)) {
-		Isc=IBATT;
-		Vsc=VBATT;
-		fault_code=12;
+	//***************** Short Circuit Protection ***********************************//
+	if(IBATT > (VBATT)) {
+		Isc = IBATT;
+		Vsc = VBATT;
+		fault_code = 12;
 		Batt_Open_Mode();
-		flag_trip_shortcircuit=ON;
+		flag_trip_shortcircuit = ON;
 		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 	}
 
-	// Under Voltage protection
-	else if(VBATT < V_Under_Set && flag_trip_undervoltage == OFF ) { //Indikasi terjadi Undervoltage
-		fault_code=1;
-		T_Under_trip=TMS/(1-(VBATT/V_Under_Set));
-		T_trip_cycle+=0.001;
-
-		if(T_trip_cycle>T_Under_trip && flag_trip_undervoltage==OFF) {
+	//**************Pengecekan OverCharge****************************//
+	else if(Pack_SOC >= SOC_Over_Set-10 && flag_trip_SOCOverCharge==OFF) {
+		fault_code=7;
+		if(Pack_SOC>SOC_Over_Set){
 			Batt_Open_Mode();
-			T_trip_cycle=T_Under_trip;
-			flag_trip_undervoltage=ON;
+			flag_trip_SOCOverCharge=ON;
 			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
-		}
-
-		if(flag_trip_undervoltage==OFF) {
-			if(T_Under_trip-T_trip_cycle>15) {
-				if((test_tim2%1000)==0) {
-					BUZZ_Toggle;
-					test_tim2=0;
-				}
-			}
-			else if(T_Under_trip-T_trip_cycle>10) {
-				if((test_tim2%100)==0) {
-					BUZZ_Toggle;
-					test_tim2=0;
-				}
-			}
-			else if(T_Under_trip-T_trip_cycle>1) {
-				HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-			}
 		}
 	}
 
-	// Over Current Protection
-	if((IBATT-I_Over_Set)>0 && flag_trip_overcurrentdischarge==OFF) {  //Indikasi terjadi Over Current
-		fault_code=2;
-		T_I_Over_trip=TMS_I_Over/((IBATT/I_Over_Set)-1);
-		T_I_Over_trip_cycle+=0.001;
+	//***************** Undervoltage Protection ***********************************//
+		else if(VBATT<V_Under_Set && flag_trip_undervoltage==OFF ) {   //Indikasi terjadi Undervoltage
+			fault_code=1;
+			T_Under_trip=TMS/(1-(VBATT/V_Under_Set));
+			T_trip_cycle+=0.001;
 
-		if(T_I_Over_trip_cycle>T_I_Over_trip && flag_trip_overcurrentdischarge==OFF) {
-			T_I_Over_trip_cycle=T_I_Over_trip;
-			flag_trip_overcurrentdischarge=ON;
-			Batt_Open_Mode();
-			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
-		}
-		if(flag_trip_overcurrentdischarge==OFF) {
-			if(T_I_Over_trip-T_I_Over_trip_cycle>15) {
-				if((test_tim2%1000)==0) {
-					BUZZ_Toggle;
-					test_tim2=0;
-				}
-			}
-			else if(T_I_Over_trip-T_I_Over_trip_cycle>10) {
-				if((test_tim2%100)==0) {
-					BUZZ_Toggle;
-					test_tim2=0;
-				}
-			}
-			else if(T_I_Over_trip-T_I_Over_trip_cycle>1) {
-				HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+			if(T_trip_cycle>T_Under_trip && flag_trip_undervoltage==OFF) {
+				Batt_Open_Mode();
+				T_trip_cycle=T_Under_trip;
+				flag_trip_undervoltage=ON;
+				HAL_GPIO_WritePin(GATE_MOS_GPIO_Port, GATE_MOS_Pin, GPIO_PIN_RESET);
 			}
 		}
-	}
 
-	// Over Temperature protection
-	else if(((50-Suhu_T1 < 10)||(85-Suhu_T2 < 10)||(50-Suhu_T3 < 10)||(85-Suhu_T4 < 10)) && flag_trip_overtemperature==OFF) {
+	//**************Pengecekan OverCurrent Charge **********************//
+		else if((fabs(IBATT)-I_Over_Set_Charge)>0 && flag_trip_overcurrentcharge==OFF) {  //Indikasi terjadi Over Current
+			fault_code=10;
+			T_I_Over_trip=8/(((IBATT/6.9)*(IBATT/6.9))-1);
+			T_I_Over_trip_cycle+=0.01;
+
+			if(T_I_Over_trip_cycle>T_I_Over_trip && flag_trip_overcurrentcharge==OFF) {
+				Batt_Open_Mode();
+				T_I_Over_trip_cycle=T_I_Over_trip;
+				flag_trip_overcurrentcharge=ON;
+				HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+			}
+
+			if(flag_trip_overcurrentcharge==OFF) {
+				if(T_I_Over_trip-T_I_Over_trip_cycle>15) {
+					if((test_tim2%1000)==0) {
+						BUZZ_Toggle;
+						test_tim2=0;
+					}
+				}
+				else if(T_I_Over_trip-T_I_Over_trip_cycle>10) {
+					if((test_tim2%100)==0) {
+						BUZZ_Toggle;
+						test_tim2=0;
+					}
+				}
+				else if(T_I_Over_trip-T_I_Over_trip_cycle>3) {
+					if((test_tim2%10)==0) {
+						BUZZ_Toggle;
+						test_tim2=0;
+					}
+				}
+				else if(T_I_Over_trip-T_I_Over_trip_cycle>1) {
+					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+				}
+			}
+		}
+
+	//**************Pengecekan OverTemperature ****************************//
+	else if(((Suhu_T1>Chg_OverTemp)||(Suhu_T2>Chg_OverTemp)||(Suhu_T3>Chg_OverTemp)||(Suhu_T4>Chg_OverTemp)) && flag_trip_overtemperature==OFF) {
 		fault_code=3;
-		if(Suhu_T1>Temp_Over_Set-10 && Suhu_T1<=Temp_Over_Set-5) {
+		if(Suhu_T1>Chg_OverTemp && Suhu_T1<=Chg_OverTemp+1) {
 			if((test_tim2%1000)==0) {
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set-5 && Suhu_T1<=Temp_Over_Set-2){
-			if((test_tim2%500)==0) {
+		else if(Suhu_T1>Chg_OverTemp+1 && Suhu_T1<=Chg_OverTemp+2){
+			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>Temp_Over_Set-2 && Suhu_T1<=Temp_Over_Set) {
-			if((test_tim2%500)==0)
-			{
+		else if(Suhu_T1>Chg_OverTemp+2 && Suhu_T1<=Chg_OverTemp+3){
+			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Suhu_T1>50||Suhu_T2>85||Suhu_T3>50||Suhu_T4>85) {
+		else if(Suhu_T1>Chg_OverTemp+3||Suhu_T2>Chg_OverTemp+3||Suhu_T3>Chg_OverTemp+3||Suhu_T4>Chg_OverTemp+3){
 			Batt_Open_Mode();
 			flag_trip_overtemperature=ON;
 			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
@@ -926,39 +896,39 @@ void Batt_Protection_when_chargedischarge(void) {
 		}
 	}
 
-	// SOC OverDischarge protection
-	else if(Pack_SOC-SOC_Under_Set<=10 && flag_trip_SOCOverDischarge==OFF && BATT_State==STATE_DISCHARGE) {
+	//********************** SOC_OverDischarge****************************//
+	else if(Pack_SOC <= SOC_Under_Set+5 && flag_trip_SOCOverDischarge==OFF && BATT_State==STATE_DISCHARGE) {
 		fault_code=5;
-		if(Pack_SOC<=SOC_Under_Set+10 && Pack_SOC>SOC_Under_Set+5) {
-			if((test_tim2%1000)==0) {
+		if(Pack_SOC <= SOC_Under_Set+5 && Pack_SOC>SOC_Under_Set+3){
+			if((test_tim2%1000)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Pack_SOC<=SOC_Under_Set+5 && Pack_SOC>SOC_Under_Set+2) {
-			if((test_tim2%500)==0) {
-				BUZZ_Toggle;
-				test_tim2=0;
-			}
-		}
-		else if(Pack_SOC<SOC_Under_Set+2 && Pack_SOC>=SOC_Under_Set) {
+		else if(Pack_SOC <= SOC_Under_Set+3 && Pack_SOC>SOC_Under_Set+2){
 			if((test_tim2%500)==0){
 				BUZZ_Toggle;
 				test_tim2=0;
 			}
 		}
-		else if(Pack_SOC<SOC_Under_Set) {
+		else if(Pack_SOC <= SOC_Under_Set+2 && Pack_SOC>SOC_Under_Set){
+			if((test_tim2%500)==0){
+				BUZZ_Toggle;
+				test_tim2=0;
+			}
+		}
+		else if(Pack_SOC <= SOC_Under_Set){
 			Batt_Open_Mode();
 			flag_trip_SOCOverDischarge=ON;
 			HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 		}
 	}
 
-	// Imbalance Protection
-	else if(Persen_Imbalance_Set-persen_imbalance<10)
+	//********************** Imbalance Checking Status ****************************//
+	else if(persen_imbalance >= Persen_Imbalance_Set + 5)
 	{
 		fault_code=6;
-		if(persen_imbalance>Persen_Imbalance_Set)
+		if(persen_imbalance >= Persen_Imbalance_Set)
 		{
 			flag_trip_unbalance=ON;
 			Batt_Open_Mode();
@@ -967,16 +937,18 @@ void Batt_Protection_when_chargedischarge(void) {
 
 	//Clearing when data status is normal before system trip
 	else {
-		if(fault_code!=0)
+		if(fault_code!=0){
 			last_fault_code=fault_code;
+		}
 		fault_code=0;
-		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 		T_Under_trip=0;
 		T_trip_cycle=T_trip_cycle-0.001;
 		T_I_Over_trip_cycle-=0.001;
-		if(T_trip_cycle < 0)
+		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+
+		if(T_trip_cycle<0)
 			T_trip_cycle=0;
-		if(T_I_Over_trip_cycle < 0)
+		if(T_I_Over_trip_cycle<0)
 			T_I_Over_trip_cycle=0;
 	}
 }
